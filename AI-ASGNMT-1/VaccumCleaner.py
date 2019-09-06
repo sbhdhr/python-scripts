@@ -1,13 +1,14 @@
 import turtle
 
-
 class VaccumCleaner:
 
-    l = [x-4.5 for x in range(10)]
-    l2 = [4.5-x for x in range(10)]
-
-    def __init__(self, canvas):
-        self.vc = turtle.RawTurtle(canvas)
+    def __init__(self, canvas, n,length,dotSize):
+        self.vc = turtle.RawTurtle(canvas,shape="turtle")
+        self.n = n
+        self.length = length
+        self.dotSize = dotSize
+        self.l = [x-(n/2)+0.5 for x in range(self.n)]
+        self.l2 = [(n/2)-0.5-x for x in range(self.n)]
 
     def forward(self, steps=100):
         self.vc.forward(steps)
@@ -21,57 +22,67 @@ class VaccumCleaner:
     def right(self, angle=90):
         self.vc.right(angle)
 
-    def moveToXY(self, x, y, n, length=60, drawPath=False):
+    def moveToXY(self, x, y, drawPath=False):
         if(not drawPath):
             self.vc.penup()
 
-        self.vc.goto(VaccumCleaner.l[y]*length, VaccumCleaner.l2[x]*length)
+        self.vc.goto(self.l[y]*self.length, self.l2[x]*self.length)
         self.vc.setheading(90)
         self.vc.pendown()
 
-    def paintDot(self, color, dotSize=35):
-        self.vc.dot(dotSize, color)
+    def paintDot(self, color):
+        self.vc.dot(self.dotSize, color)
 
-    def goHome(self, n, length=60, corner=3, drawPath=False):
+    def goHome(self, corner=3, drawPath=False):
         if(not drawPath):
             self.vc.penup()
-        self.vc.goto(-length*n / 2+(length/2), length*n/2-(length/2))
+        self.vc.goto(-self.length*self.n / 2+(self.length/2), self.length*self.n/2-(self.length/2))
         self.vc.setheading(90)
         self.vc.pendown()
 
-    def drawGrid(self, n, length=60):
+    def drawGrid(self):
+        self.vc.ht()
         self.vc.speed(0)
+        self.vc._delay(0)
         self.vc.penup()
-        self.vc.goto(-n * length/2, -n * length/2)
+        self.vc.goto(-self.n * self.length/2, -self.n * self.length/2)
         self.vc.pendown()
         sign = 1
         for _ in range(2):
-            for _ in range(n):
-                self.vc.forward(length * n)
+            for _ in range(self.n):
+                self.vc.forward(self.length * self.n)
                 self.vc.left(sign * 90)
-                self.vc.forward(length)
+                self.vc.forward(self.length)
                 self.vc.left(sign * 90)
                 sign = 0 - sign
 
-            self.vc.forward(length * n)
-            [self.vc.right,  self.vc.left][n % 2](90)
+            self.vc.forward(self.length * self.n)
+            [self.vc.right,  self.vc.left][self.n % 2](90)
             sign = 0 - sign
+        self.vc.st()
 
-    def showState(self, env, length=60, dotSize=35):
-            # self.drawGrid(env.n,length)
-        self.reset(env.n)
+    def showState(self, env):
+        self.vc.ht()
+        self.vc.speed(0)
+        self.vc._delay(0)
+        self.vc._tracer(0, 0)
+        self.reset()
         for r in range(env.n):
             for c in range(env.n):
-                self.moveToXY(r, c, env.n)
+                self.moveToXY(r, c)
                 if env.board[r][c] == 0:
-                    self.paintDot("white", dotSize)
+                    self.paintDot("white")
                 else:
-                    self.paintDot("red", dotSize)
+                    self.paintDot("red")
+        
+        self.moveToXY(env.vacCleanerX, env.vacCleanerY)
+        self.vc.st()
+        self.vc._update()
+        self.vc._tracer(1,0)
+        
 
-        self.moveToXY(env.vacCleanerX, env.vacCleanerY, env.n)
-
-    def reset(self, n):
-        self.vc.turtlesize(2, 2, None)
-        self.goHome(n)
+    def reset(self):
+        self.vc.turtlesize(1, 1, None)
+        self.goHome()
 
     
