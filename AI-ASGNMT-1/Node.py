@@ -1,4 +1,4 @@
 class Node:
-    def __init__(self,env,children):
+    def __init__(self,env,parent):
         self.env = env
-        self.children = children
+        self.parent = parent
