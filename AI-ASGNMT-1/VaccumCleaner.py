@@ -1,4 +1,5 @@
 import turtle
+import time
 
 class VaccumCleaner:
 
@@ -33,7 +34,7 @@ class VaccumCleaner:
     def paintDot(self, color):
         self.vc.dot(self.dotSize, color)
 
-    def goHome(self, corner=3, drawPath=False):
+    def goHome(self,drawPath=False):
         if(not drawPath):
             self.vc.penup()
         self.vc.goto(-self.length*self.n / 2+(self.length/2), self.length*self.n/2-(self.length/2))
@@ -84,5 +85,19 @@ class VaccumCleaner:
     def reset(self):
         self.vc.turtlesize(1, 1, None)
         self.goHome()
+
+
+    def goHomeAftCleaning(self,x,y,delay=0.5):
+        
+        while(x>0):
+            x = x-1
+            #print("X: {}".format(x))
+            self.moveToXY(x,y,True)
+            time.sleep(delay)
+        while(y>0):
+            y = y-1
+            #print("Y: {}".format(y))
+            self.moveToXY(x,y,True)
+            time.sleep(delay)
 
     
