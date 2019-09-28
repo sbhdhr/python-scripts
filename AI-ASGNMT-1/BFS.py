@@ -1,3 +1,8 @@
+'''
+Name : Subhashis Dhar
+Roll No: 2019H1030023P
+'''
+
 from Environment import Environment
 from Actions import Actions
 from Node import Node
@@ -17,6 +22,8 @@ def BFS(rootNode,goalState,path,queueSize):
     q = []
     
     q.append(rootNode)
+    #print(rootNode.env.n)
+    #print(rootNode.env.print())
 
     while(len(q) != 0):
         n = q.pop(0)
@@ -39,7 +46,7 @@ def BFS(rootNode,goalState,path,queueSize):
                 q.append(nextNode)
         # else:
         #     print("Duplicate state. Ignored!")
-        #print("Queue Size: {}".format(len(q)))
+        print("Queue Size: {}".format(len(q)))
         queueSize.append(len(q))
     return None
 
